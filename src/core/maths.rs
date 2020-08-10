@@ -1,22 +1,6 @@
 use num::{Float, Integer, FromPrimitive};
 
-pub fn clamp<T: Float>(min: T, max: T, value: T) -> T {
-    if value > max {
-        return max;
-    } else if value < min {
-        return min;
-    }
-    value
-}
-
-pub fn clamp_int<T: Integer>(min: T, max: T, value: T) -> T {
-    if value > max {
-        return max;
-    } else if value < min {
-        return min;
-    }
-    value
-}
+pub use num::clamp;
 
 /// Lerp between a and b by amount (0 - 1)
 pub fn lerp<T: Float>(a: T, b: T, amount: T) -> T {
@@ -46,4 +30,10 @@ pub fn lerp_int<T>(a: T, b: T, percent: T) -> T
         let range = b - a;
         return a + ( range * range / T::from_usize(100).unwrap() * percent);
     }
+}
+
+
+#[test]
+fn lerp_test() {
+    assert_eq!(5., lerp(0., 10., 0.5));
 }

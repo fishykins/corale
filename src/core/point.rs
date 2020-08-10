@@ -1,14 +1,13 @@
 use vek::Vec3;
 use super::{GridNum, IndexType};
 
-#[derive(Copy, Clone, Default, PartialEq, PartialOrd, Eq, Ord, Hash)]
-pub struct PointIndex<Ix = crate::core::DefaultIx>(Ix);
-
-
 pub trait Point<T> where T: GridNum {
     fn from_vec3(pos: Vec3<T>) -> Self;
     fn to_vec3(self) -> Vec3<T>;
 }
+
+#[derive(Copy, Clone, Default, PartialEq, PartialOrd, Eq, Ord, Hash)]
+pub struct PointIndex<Ix = crate::core::DefaultIx>(Ix);
 
 impl<Ix: IndexType> PointIndex<Ix> {
     #[inline]

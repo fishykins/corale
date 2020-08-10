@@ -1,5 +1,5 @@
 use vek::Vec3;
-use super::{Face, Vertex, FaceIndex};
+use super::{Face, Vertex, FaceIndex, Filter};
 use crate::core::{PointIndex, GridNum};
 
 #[derive(Clone)]
@@ -98,7 +98,11 @@ impl<T> Mesh<T> where T: GridNum {
         self.name.clone()
     }
 
-    pub fn map_verts<F>(&mut self, f: F) where F: Fn(&Vertex<T>) -> Vertex<T> {
-        self.verticies = self.verticies.iter().map(|x| f(&x)).collect();
+    pub fn map_verts<F>(&mut self, f: F) -> Self 
+        where F: Fn(&Vertex<T>) -> Vertex<T> 
+    {
+        let mut clone = self.clone();
+        clone.verticies = self.verticies.iter().map(|x| f(&x)).collect();
+        clone
     }
 }
