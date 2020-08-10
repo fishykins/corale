@@ -1,4 +1,3 @@
-use num::{ToPrimitive, FromPrimitive};  //TODO: Remove the need for unsigned types
 use crate::primitive::Cuboid;
 use crate::core::GridNum;
 use vek::Vec3;
@@ -6,7 +5,7 @@ use vek::Vec3;
 pub trait Graph<I, T>: Cuboid<T>
     where 
         I: PartialEq, 
-        T: GridNum + ToPrimitive + FromPrimitive
+        T: GridNum
 {
     fn in_bounds(&self, pos: Vec3<T>) -> bool;
     fn add(&mut self, item: I, pos: Vec3<T>) -> bool;

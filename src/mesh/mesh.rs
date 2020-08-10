@@ -1,5 +1,6 @@
 use vek::Vec3;
-use super::{Face, Vertex, VertexIndex, FaceIndex, GridNum};
+use super::{Face, Vertex, FaceIndex};
+use crate::core::{PointIndex, GridNum};
 
 #[derive(Clone)]
 #[no_mangle]
@@ -23,21 +24,21 @@ impl<T> Mesh<T> where T: GridNum {
         self.name = Some(name);
     }
 
-    /// Adds a lone vertex to the mesh. Be sure to give him some friends!
-    pub fn add_vertex(&mut self, vertex: Vertex<T>) -> VertexIndex {
+    /// adds a lone vertex to the mesh. Be sure to give him some friends!
+    pub fn add_vertex(&mut self, vertex: Vertex<T>) -> PointIndex {
         let i = self.verticies.len();
         self.verticies.push(vertex);
-        VertexIndex::new(i)
+        PointIndex::new(i)
     }
 
-    /// Adds a face to the mesh. Assumes the vertecies are already in the mesh
+    /// adds a face to the mesh. Assumes the vertecies are already in the mesh
     pub fn add_face(&mut self, face: Face) -> FaceIndex {
         let i = self.faces.len();
         self.faces.push(face);
         FaceIndex::new(i)
     }
 
-    /// Generates a face from given points and adds the vertecies to the mesh. Not to be used in conjunction with add_vertex or add_face
+    /// generates a face from given points and adds the vertecies to the mesh. Not to be used in conjunction with add_vertex or add_face
     pub fn make_face(&mut self, verticies: Vec<Vertex<T>>) -> FaceIndex {
         let mut face = Face::capacity(verticies.len());
         for i in 0..verticies.len() {

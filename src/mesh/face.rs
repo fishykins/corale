@@ -1,16 +1,15 @@
-use super::VertexIndex;
-use super::IndexType;
+use crate::core::{IndexType, PointIndex};
 
 #[derive(Copy, Clone, Default, PartialEq, PartialOrd, Eq, Ord, Hash)]
 pub struct FaceIndex<Ix = crate::core::DefaultIx>(Ix);
 
 #[derive(Clone)]
 pub struct Face {
-    verts: Vec<VertexIndex>,
+    verts: Vec<PointIndex>,
 }
 
 impl Face {
-    pub fn new(verts: Vec<VertexIndex>) -> Self {
+    pub fn new(verts: Vec<PointIndex>) -> Self {
         Self {
             verts,
         }
@@ -28,15 +27,15 @@ impl Face {
         }
     }
 
-    pub fn add_vert(&mut self, vert: VertexIndex) {
+    pub fn add_vert(&mut self, vert: PointIndex) {
         self.verts.push(vert);
     }
 
-    pub fn verts(&self) -> Vec<VertexIndex> {
+    pub fn verts(&self) -> Vec<PointIndex> {
         self.verts.clone()
     }
 
-    pub fn consume(self) -> Vec<VertexIndex> {
+    pub fn consume(self) -> Vec<PointIndex> {
         self.verts
     }
 }

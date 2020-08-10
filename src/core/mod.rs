@@ -1,18 +1,14 @@
-mod mesh;
-mod face;
-mod vertex;
 mod direction;
 mod index_type;
+mod point;
 
 pub mod maths;
 
-pub use mesh::Mesh;
-pub use face::{Face, FaceIndex};
-pub use vertex::{Vertex, VertexIndex};
+pub use point::{Point, PointIndex};
 pub use direction::Direction;
 pub use index_type::IndexType;
 
-use num::{Num, CheckedMul, FromPrimitive};
+use num::{Num, CheckedMul, FromPrimitive, ToPrimitive};
 
 pub type DefaultIx = usize;
-pub trait GridNum : Num + Clone + Copy + CheckedMul + FromPrimitive {}
+pub trait GridNum : Num + Clone + Copy + CheckedMul + FromPrimitive + ToPrimitive {}
