@@ -1,5 +1,5 @@
 use vek::Vec3;
-use super::{Face, Vertex, FaceIndex, Filter};
+use super::{Face, Vertex, FaceIndex, Primitive};
 use crate::core::{PointIndex, GridNum};
 
 #[derive(Clone)]
@@ -84,16 +84,6 @@ impl<T> Mesh<T> where T: GridNum {
         );
     }
 
-    /// Getter for verts
-    pub fn verticies(&self) -> &Vec<Vertex<T>> {
-        &self.verticies
-    }
-
-    /// getter for faces. Duh
-    pub fn faces(&self) -> &Vec<Face> {
-        &self.faces
-    }
-
     pub fn name(&self) -> Option<String> {
         self.name.clone()
     }
@@ -104,5 +94,31 @@ impl<T> Mesh<T> where T: GridNum {
         let mut clone = self.clone();
         clone.verticies = self.verticies.iter().map(|x| f(&x)).collect();
         clone
+    }
+}
+
+impl<T> Primitive<T> for Mesh<T> where T: GridNum {
+    /// Getter for verts
+    fn verticies(&self) -> &Vec<Vertex<T>> {
+        &self.verticies
+    }
+
+    /// getter for faces. Duh
+    fn faces(&self) -> &Vec<Face> {
+        &self.faces
+    }
+
+    fn vertex(&self, index: PointIndex) -> Option<&Vertex<T>> {
+        if index.index() >= self.verticies.len() {
+            return None;
+        }
+        Some(&self.verticies[index.index()])
+    }
+
+    fn vertex_mut(&mut self, index: PointIndex) -> Option<&mut Vertex<T>> {
+        if index.index() >= self.verticies.len() {
+            return None;
+        }
+        Some(&mut self.verticies[index.index()])
     }
 }
