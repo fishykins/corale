@@ -3,6 +3,11 @@ name = "corale"
 version = "0.1.0"
 authors = ["Fishykins <caspar.m.green@gmail.com>"]
 edition = "2018"
+keywords = ["3D", "geometry", "gamedev"]
+categories = ["rendering::data-formats", "game-development"]
+license = "MIT OR Apache-2.0"
+description = "A package for 3D geometry manipulation"
+repository = "https://github.com/fishykins/corale/"
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
