@@ -12,3 +12,8 @@ use num::{CheckedMul, FromPrimitive, ToPrimitive, Signed, Integer};
 
 pub type DefaultIx = usize;
 pub trait GridNum : Integer + Signed + Clone + Copy + CheckedMul + FromPrimitive + ToPrimitive {}
+
+impl GridNum for i64 {}
+impl GridNum for i32 {}
+impl GridNum for i16 {}
+impl GridNum for i8 {}

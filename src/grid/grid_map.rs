@@ -7,10 +7,12 @@ use vek::Vec3;
 pub struct GridMap<I, T> where T: GridNum, I: PartialEq + Clone + Default {
     items: Vec<Option<I>>,
     index_cap: usize,
+    indicies: Vec<PointIndex>,
     bounds: BoundingBox<T>,
     width: usize,
     depth: usize,
     offset: Vec3<i64>,
+    iter_index: usize,
 }
 
 impl<I, T> GridMap<I, T> where T: GridNum, I: PartialEq + Clone + Default {
@@ -36,10 +38,12 @@ impl<I, T> GridMap<I, T> where T: GridNum, I: PartialEq + Clone + Default {
         Self {
             bounds: BoundingBox::new(min, max),
             items: vec![None; cap],
+            indicies: Vec::new(),
             index_cap: cap,
             offset,
             width,
             depth,
+            iter_index: 0,
         }
     }
 
@@ -57,7 +61,10 @@ impl<I, T> GridMap<I, T> where T: GridNum, I: PartialEq + Clone + Default {
     }
 
     fn index_used(&self, index: PointIndex) -> bool {
-        self.items.get(index.index()).is_none() 
+        if self.index_valid(index) {
+            return self.items[index.index()].is_some() ;
+        }
+        return false;
     }
 }
 
@@ -70,6 +77,7 @@ impl<I, T> Grid3D<I, T> for GridMap<I, T> where T: GridNum, I: PartialEq + Clone
         let i = self.hash(pos);
         if !self.index_used(i) {
             self.items[i.index()] = Some(item);
+            self.indicies.push(i);
             return Ok(i);
         }
         Err(GridError::SpaceOccupied)
@@ -78,6 +86,7 @@ impl<I, T> Grid3D<I, T> for GridMap<I, T> where T: GridNum, I: PartialEq + Clone
     fn remove(&mut self, index: PointIndex) -> bool {
         if self.index_valid(index) && self.index_used(index) {
             self.items[index.index()] = None;
+            self.indicies.retain(|v| *v != index);
             return true;
         }
         false
@@ -85,10 +94,14 @@ impl<I, T> Grid3D<I, T> for GridMap<I, T> where T: GridNum, I: PartialEq + Clone
 
     fn index(&self, pos: Vec3<T>) -> Option<PointIndex> {
         let i = self.hash(pos);
-        if self.index_valid(i) {
+        if self.index_used(i) {
             return Some(i)
         }
         None
+    }
+
+    fn len(&self) -> usize {
+        self.indicies.len()
     }
 
     fn item(&self, index: PointIndex) -> Option<&I> {
@@ -131,20 +144,27 @@ impl<I, T> BoxCollider<T> for GridMap<I, T> where T: GridNum, I: PartialEq + Clo
 }
 
 impl<I, T> Iterator for GridMap<I, T> where I: PartialEq + Clone + Default, T: GridNum {
-    type Item = I;
+    type Item = PointIndex;
 
-    fn next(&mut self) -> Option<Self::Item> {
+    fn next(&mut self) -> Option<PointIndex> {
+        if self.iter_index < self.indicies.len() {
+            self.iter_index += 1;
+            return Some(self.indicies[self.iter_index]);
+        }
+        self.iter_index = 0;
         None
     }
 }
 
 #[test]
-fn vec_retain_test() {
-    let mut array = Vec::<i32>::with_capacity(10);
-    for i in 0..10 {
-        array.push(i);
-    }
-    println!("len = {}, 5 = {}", array.len(), array[5]);
-    array.retain(|x| *x != 4 && *x != 6);
-    println!("len = {}, 5 = {}", array.len(), array[5]);
+fn gridmap_test() {
+    let mut grid = GridMap::<f64, i64>::new(Vec3::zero(), Vec3::from(64));
+
+    let pos = Vec3::new(2,4,12);
+    let value = 42.;
+    let index = grid.add(value, pos).unwrap();
+
+    assert_eq!(index, grid.index(pos).unwrap());
+    assert!(grid.remove(index));
+    assert!(grid.index(pos).is_none());
 }

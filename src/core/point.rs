@@ -6,7 +6,7 @@ pub trait Point<T> where T: GridNum {
     fn to_vec3(self) -> Vec3<T>;
 }
 
-#[derive(Copy, Clone, Default, PartialEq, PartialOrd, Eq, Ord, Hash)]
+#[derive(Copy, Clone, Default, PartialEq, PartialOrd, Eq, Ord, Hash, Debug)]
 pub struct PointIndex<Ix = crate::core::DefaultIx>(Ix);
 
 impl<Ix: IndexType> PointIndex<Ix> {
