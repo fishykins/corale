@@ -8,7 +8,7 @@ pub use point::{Point, PointIndex};
 pub use direction::Direction;
 pub use index_type::IndexType;
 
-use num::{Num, CheckedMul, FromPrimitive, ToPrimitive};
+use num::{CheckedMul, FromPrimitive, ToPrimitive, Signed, Integer};
 
 pub type DefaultIx = usize;
-pub trait GridNum : Num + Clone + Copy + CheckedMul + FromPrimitive + ToPrimitive + PartialEq + Ord {}
+pub trait GridNum : Integer + Signed + Clone + Copy + CheckedMul + FromPrimitive + ToPrimitive {}
