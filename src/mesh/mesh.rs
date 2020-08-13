@@ -1,16 +1,16 @@
 use vek::Vec3;
 use super::{Face, Vertex, FaceIndex, Primitive};
-use crate::core::{PointIndex, GridNum};
+use crate::core::{PointIndex, GeoNum};
 
 #[derive(Clone, Debug, PartialEq)]
 #[no_mangle]
-pub struct Mesh<T> where T: GridNum {
+pub struct Mesh<T> where T: GeoNum {
     verticies: Vec<Vertex<T>>,
     faces: Vec<Face>,
     name: Option<String>,
 }
 
-impl<T> Mesh<T> where T: GridNum {
+impl<T> Mesh<T> where T: GeoNum {
 
     pub fn new() -> Self {
         Self {
@@ -97,7 +97,7 @@ impl<T> Mesh<T> where T: GridNum {
     }
 }
 
-impl<T> Primitive<T> for Mesh<T> where T: GridNum {
+impl<T> Primitive<T> for Mesh<T> where T: GeoNum {
     /// Getter for verts
     fn verticies(&self) -> &Vec<Vertex<T>> {
         &self.verticies

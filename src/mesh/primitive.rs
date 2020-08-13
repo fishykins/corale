@@ -1,7 +1,7 @@
-use crate::core::{GridNum, PointIndex};
-use super::{Vertex, Face};
+use crate::core::{GeoNum, PointIndex};
+use crate::mesh::{Vertex, Face};
 
-pub trait Primitive<T> where T: GridNum {
+pub trait Primitive<T> where T: GeoNum {
     /// Getter for verts
     fn verticies(&self) -> &Vec<Vertex<T>>;
     fn faces(&self) -> &Vec<Face>;

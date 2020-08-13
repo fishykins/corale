@@ -1,14 +1,14 @@
 use vek::Vec3;
-use crate::core::{GridNum, Point};
+use crate::core::{Point, GeoNum};
 
 #[derive(Clone, Copy, Debug, Default, PartialEq, PartialOrd, Eq, Ord)]
-pub struct Vertex<T> where T: GridNum {
+pub struct Vertex<T> where T: GeoNum {
     pub x: T,
     pub y: T,
     pub z: T,
 }
 
-impl<T> Vertex<T> where T: GridNum {
+impl<T> Vertex<T> where T: GeoNum {
     pub fn new(x: T, y: T, z: T) -> Self {
         Self {
             x,
@@ -18,7 +18,7 @@ impl<T> Vertex<T> where T: GridNum {
     }
 }
 
-impl<T> Point<T> for Vertex<T> where T: GridNum  {
+impl<T> Point<T> for Vertex<T> where T: GeoNum  {
     fn from_vec3(pos: Vec3<T>) -> Self {
         Self {
             x: pos.x,

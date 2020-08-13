@@ -1,5 +1,6 @@
-use super::{Primitive, shapes::Cube};
+use super::{shapes::Cube};
 use crate::core::{GridNum};
+use crate::mesh::Primitive;
 use vek::Vec3;
 
 pub trait Collider<T> where T: GridNum

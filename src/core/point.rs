@@ -1,7 +1,7 @@
 use vek::Vec3;
-use super::{GridNum, IndexType};
+use super::{IndexType, GeoNum};
 
-pub trait Point<T> where T: GridNum {
+pub trait Point<T> where T: GeoNum {
     fn from_vec3(pos: Vec3<T>) -> Self;
     fn to_vec3(self) -> Vec3<T>;
 }

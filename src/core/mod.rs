@@ -8,10 +8,11 @@ pub use point::{Point, PointIndex};
 pub use direction::Direction;
 pub use index_type::IndexType;
 
-use num::{CheckedMul, FromPrimitive, ToPrimitive, Signed, Integer};
+use num::{Num, CheckedMul, FromPrimitive, ToPrimitive, Signed, Integer};
 
 pub type DefaultIx = usize;
 pub trait GridNum : Integer + Signed + Clone + Copy + CheckedMul + FromPrimitive + ToPrimitive {}
+pub trait GeoNum : Num + Signed + Clone + Copy + CheckedMul + FromPrimitive + ToPrimitive {}
 
 impl GridNum for i64 {}
 impl GridNum for i32 {}
