@@ -1,4 +1,4 @@
-use crate::mesh::{Primitive, shapes::Cube};
+use super::{Primitive, shapes::Cube};
 use crate::core::{GridNum};
 use vek::Vec3;
 

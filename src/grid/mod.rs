@@ -1,6 +1,6 @@
 mod grid_map;
 
-use crate::mesh::Cube;
+use crate::geom::Cube;
 use crate::core::{GridNum, PointIndex};
 use vek::Vec3;
 

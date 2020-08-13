@@ -1,4 +1,4 @@
-use crate::mesh::{BoundingBox, BoxCollider, Cube};
+use crate::geom::{BoundingBox, BoxCollider, Cube};
 use crate::core::{GridNum, PointIndex};
 use super::{Grid3D, GridError};
 use vek::Vec3;
