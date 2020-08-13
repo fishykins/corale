@@ -56,31 +56,19 @@ impl<T> Mesh<T> where T: GeoNum {
     //TODO: fail upon unsigned attempt
     pub fn invert_x(&mut self) {
         self.map_verts(|v| 
-            if let Some(x) = v.x.checked_mul(&T::from_i8(-1).unwrap()) {
-                Vertex::new(x, v.y, v.z)
-            } else {
-                *v
-            }
+            Vertex::new(v.x * -T::one(), v.y, v.z)
         );
     }
 
     pub fn invert_y(&mut self) {
         self.map_verts(|v| 
-            if let Some(y) = v.y.checked_mul(&T::from_i8(-1).unwrap()) {
-                Vertex::new(v.x, y, v.z)
-            } else {
-                *v
-            }
+            Vertex::new(v.x, v.y * -T::one(), v.z)
         );
     }
 
     pub fn invert_z(&mut self) {
         self.map_verts(|v| 
-            if let Some(z) = v.z.checked_mul(&T::from_i8(-1).unwrap()) {
-                Vertex::new(v.x, v.y, z)
-            } else {
-                *v
-            }
+            Vertex::new(v.x, v.y, v.z * -T::one())
         );
     }
 

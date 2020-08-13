@@ -12,9 +12,12 @@ use num::{Num, CheckedMul, FromPrimitive, ToPrimitive, Signed, Integer};
 
 pub type DefaultIx = usize;
 pub trait GridNum : Integer + Signed + Clone + Copy + CheckedMul + FromPrimitive + ToPrimitive {}
-pub trait GeoNum : Num + Signed + Clone + Copy + CheckedMul + FromPrimitive + ToPrimitive {}
+pub trait GeoNum : Num + Signed + Clone + Copy + FromPrimitive + ToPrimitive + PartialOrd {}
 
 impl GridNum for i64 {}
 impl GridNum for i32 {}
 impl GridNum for i16 {}
 impl GridNum for i8 {}
+
+impl GeoNum for f64 {}
+impl GeoNum for f32 {}
