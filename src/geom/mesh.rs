@@ -2,7 +2,7 @@ use vek::Vec3;
 use super::{Face, Vertex, FaceIndex, Primitive};
 use crate::core::{PointIndex, GridNum};
 
-#[derive(Clone)]
+#[derive(Clone, Debug, PartialEq)]
 #[no_mangle]
 pub struct Mesh<T> where T: GridNum {
     verticies: Vec<Vertex<T>>,

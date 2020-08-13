@@ -1,7 +1,7 @@
 use vek::Vec3;
 use crate::core::{GridNum, Point};
 
-#[derive(Clone, Copy, Default, PartialEq, PartialOrd, Eq, Ord)]
+#[derive(Clone, Copy, Debug, Default, PartialEq, PartialOrd, Eq, Ord)]
 pub struct Vertex<T> where T: GridNum {
     pub x: T,
     pub y: T,

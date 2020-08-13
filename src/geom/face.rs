@@ -1,9 +1,9 @@
 use crate::core::{IndexType, PointIndex};
 
-#[derive(Copy, Clone, Default, PartialEq, PartialOrd, Eq, Ord, Hash)]
+#[derive(Copy, Clone, Debug, Default, PartialEq, PartialOrd, Eq, Ord, Hash)]
 pub struct FaceIndex<Ix = crate::core::DefaultIx>(Ix);
 
-#[derive(Clone)]
+#[derive(Clone, Debug, PartialEq)]
 pub struct Face {
     verts: Vec<PointIndex>,
 }

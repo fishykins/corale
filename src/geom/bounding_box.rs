@@ -3,6 +3,7 @@ use crate::core::GridNum;
 use super::{Cube, BoxCollider};
 use vek::Vec3;
 
+#[derive(Clone, Copy, Debug, PartialEq)]
 pub struct BoundingBox<T> where T: GridNum {
     min: Vec3<T>,
     max: Vec3<T>,
