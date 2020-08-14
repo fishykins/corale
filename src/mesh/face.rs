@@ -31,7 +31,7 @@ impl Face {
         self.verts.push(vert);
     }
 
-    pub fn verts(&self) -> Vec<PointIndex> {
+    pub fn verticies(&self) -> Vec<PointIndex> {
         self.verts.clone()
     }
 

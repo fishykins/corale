@@ -16,6 +16,22 @@ impl<T> Vertex<T> where T: GeoNum {
             z
         }
     }
+
+    pub fn from_tripple(pos: (T, T, T)) -> Self {
+        Self {
+            x: pos.0,
+            y: pos.1,
+            z: pos.2
+        }
+    }
+
+    pub fn from_quad(pos: (T, T, T, T)) -> Self {
+        Self {
+            x: pos.0,
+            y: pos.1,
+            z: pos.2
+        }
+    }
 }
 
 impl<T> Point<T> for Vertex<T> where T: GeoNum  {

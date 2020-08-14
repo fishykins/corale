@@ -9,10 +9,11 @@ pub use direction::Direction;
 pub use index_type::IndexType;
 
 use num::{Num, CheckedMul, FromPrimitive, ToPrimitive, Signed, Integer};
+use std::fmt::Display;
 
 pub type DefaultIx = usize;
-pub trait GridNum : Integer + Signed + Clone + Copy + CheckedMul + FromPrimitive + ToPrimitive {}
-pub trait GeoNum : Num + Signed + Clone + Copy + FromPrimitive + ToPrimitive + PartialOrd {}
+pub trait GridNum : Integer + Signed + Clone + Copy + CheckedMul + FromPrimitive + ToPrimitive + Display {}
+pub trait GeoNum : Num + Signed + Clone + Copy + FromPrimitive + ToPrimitive + PartialOrd + Display {}
 
 impl GridNum for i64 {}
 impl GridNum for i32 {}
