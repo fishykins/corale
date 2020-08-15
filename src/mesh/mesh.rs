@@ -26,6 +26,7 @@ impl<T> Clone for Mesh<T> where T: GeoNum {
             filters: Vec::new(),
         }
     }
+
 }
 
 impl<T> Mesh<T> where T: GeoNum {
