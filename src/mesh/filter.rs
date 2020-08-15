@@ -36,4 +36,5 @@ fn scale_test() {
     let mut mesh = Mesh::<f64>::new();
     let filter = Scale::new(2.);
     mesh.add_filter(Box::new(filter));
+    let _result = mesh.render_filters().unwrap();
 }
