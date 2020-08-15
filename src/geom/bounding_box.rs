@@ -16,6 +16,18 @@ impl<T> BoundingBox<T> where T: GridNum {
             max,
         }
     }
+
+    pub fn width(&self) -> T {
+        self.max.x - self.min.x
+    }
+
+    pub fn height(&self) -> T {
+        self.max.y - self.min.y
+    }
+
+    pub fn depth(&self) -> T {
+        self.max.z - self.min.z
+    }
 }
 
 impl<T> Cube<T> for BoundingBox<T> where T: GridNum {

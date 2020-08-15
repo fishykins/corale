@@ -47,6 +47,38 @@ impl<I, T> GridMap<I, T> where T: GridNum, I: PartialEq + Clone + Default {
         }
     }
 
+    /// creates a gridmap from a boundingbox. Not as safe as "new"!
+    pub fn from_boundingbox(bounds: BoundingBox<T>) -> Self {
+        let width = bounds.width().to_usize().unwrap();
+        let depth = bounds.depth().to_usize().unwrap();
+        let height = bounds.height().to_usize().unwrap();
+
+        let cap = height + (width * width) + (depth * width * depth);
+
+        let mut offset = Vec3::zero();
+        
+        if bounds.min().x < T::zero() {
+            offset.x = bounds.min().x.abs().to_i64().unwrap();
+        }
+        if bounds.min().y < T::zero() {
+            offset.y = bounds.min().y.abs().to_i64().unwrap();
+        }
+        if bounds.min().z < T::zero() {
+            offset.z = bounds.min().z.abs().to_i64().unwrap();
+        }
+
+        Self {
+            bounds,
+            items: vec![None; cap],
+            indicies: Vec::new(),
+            index_cap: cap,
+            offset,
+            width,
+            depth,
+            iter_index: 0,
+        }
+    }
+
     fn hash(&self, pos: Vec3<T>) -> PointIndex {
         let x = self.offset.x + pos.x.to_i64().unwrap();
         let y = self.offset.y + pos.y.to_i64().unwrap();
