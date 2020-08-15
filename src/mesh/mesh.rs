@@ -1,14 +1,24 @@
 use vek::Vec3;
-use super::{Face, Vertex, FaceIndex, Primitive};
+use super::{Face, Vertex, FaceIndex, Primitive, Filter};
 use crate::core::{PointIndex, GeoNum};
+use std::fmt::{Error, Debug};
 
-#[derive(Clone, Debug, PartialEq)]
+pub trait Draw {
+    fn draw(&self);
+}
+
+#[derive(Debug)]
 #[no_mangle]
 pub struct Mesh<T> where T: GeoNum {
     verticies: Vec<Vertex<T>>,
     faces: Vec<Face>,
     name: Option<String>,
+    filters: Vec<Box<dyn Filter<T>>>,
 }
+
+// impl<T, S> Storage<S> for Mesh<T> where T: GeoNum, S: Filter<T> {
+
+// }
 
 impl<T> Mesh<T> where T: GeoNum {
 
@@ -17,9 +27,11 @@ impl<T> Mesh<T> where T: GeoNum {
             verticies: Vec::new(),
             faces: Vec::new(),
             name: None,
+            filters: Vec::new(),
         }
     }
 
+    /// sets the name as it will appear in any formatted files, such as .obj or .fbx
     pub fn set_name(&mut self, name: String) {
         self.name = Some(name);
     }
@@ -48,40 +60,62 @@ impl<T> Mesh<T> where T: GeoNum {
         self.add_face(face)
     }
 
+    /// adds a filter to our lovely mesh
+    pub fn add_filter(&mut self, filter: Box<dyn Filter<T>>) {
+        self.filters.push(filter);
+    }
+
     /// translates the mesh using given Vec3
     pub fn translate(&mut self, offset: Vec3<T>) {
         self.map_verts(|v| Vertex::new(v.x + offset.x, v.y + offset.y, v.z + offset.z));
     }
 
-    //TODO: fail upon unsigned attempt
+    /// inverts the sign of all x coordinates
     pub fn invert_x(&mut self) {
         self.map_verts(|v| 
             Vertex::new(v.x * -T::one(), v.y, v.z)
         );
     }
 
+    /// inverts the sign of all y coordinates
     pub fn invert_y(&mut self) {
         self.map_verts(|v| 
             Vertex::new(v.x, v.y * -T::one(), v.z)
         );
     }
 
+    /// inverts the sign of all z coordinates
     pub fn invert_z(&mut self) {
         self.map_verts(|v| 
             Vertex::new(v.x, v.y, v.z * -T::one())
         );
     }
 
+    /// returns the given name of this mesh
     pub fn name(&self) -> Option<String> {
         self.name.clone()
     }
 
-    pub fn map_verts<F>(&mut self, f: F) -> Self 
+    /// applies a function to the verticies of this mesh
+    pub fn map_verts<F>(&mut self, f: F)  
         where F: Fn(&Vertex<T>) -> Vertex<T> 
     {
-        let mut clone = self.clone();
-        clone.verticies = self.verticies.iter().map(|x| f(&x)).collect();
-        clone
+        self.verticies = self.verticies.iter().map(|x| f(&x)).collect();
+    }
+
+    /// makes a copy of the mesh and applies all filters
+    pub fn render_filters(&self) -> Result<Mesh<T>, Error> {
+        let mut mesh = Mesh {
+            verticies: self.verticies.clone(),
+            faces: self.faces.clone(),
+            name: self.name.clone(),
+            filters: Vec::new(),
+        };
+
+        for filter_box in self.filters.iter() {
+            filter_box.as_ref().apply(&mut mesh);
+        }
+        Ok(mesh)
     }
 }
 
