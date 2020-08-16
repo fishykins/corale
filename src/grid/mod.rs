@@ -31,4 +31,6 @@ pub trait Grid3D<I, T>: Cube<T>
     fn item_mut(&mut self, index: PointIndex) -> Option<&mut GridObject<T, I>>;
 
     fn items(&self) -> Vec<&GridObject<T, I>>;
+
+    fn neighbors(&self, pos: Vec3<T>, diagonal: bool) -> Vec<PointIndex>;
 }

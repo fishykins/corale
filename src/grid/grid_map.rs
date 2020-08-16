@@ -92,6 +92,56 @@ impl<I, T> GridMap<I, T> where T: GridNum, I: PartialEq + Clone {
         }
         return false;
     }
+
+    fn diag_neighbors(&self, pos: Vec3<T>) -> Vec<PointIndex> {
+        let min_x = if pos.x <= T::zero() { 0 } else {(pos.x - T::one()).to_usize().unwrap()};
+        let max_x = (pos.x + T::one()).to_usize().unwrap();
+        let min_y = if pos.y <= T::zero() { 0 } else {(pos.y - T::one()).to_usize().unwrap()};
+        let max_y = (pos.y + T::one()).to_usize().unwrap();
+        let min_z = if pos.z <= T::zero() { 0 } else {(pos.z - T::one()).to_usize().unwrap()};
+        let max_z = (pos.z + T::one()).to_usize().unwrap();
+
+        let mut array = Vec::new();
+
+        for x in min_x..max_x + 1 {
+            for y in min_y..max_y + 1 {
+                for z in min_z..max_z + 1 {
+                    let p = Vec3::new(x,y,z).map(|i| T::from_usize(i).unwrap());
+                    if p == pos {
+                        continue;
+                    }
+
+                    let item = self.index(p);
+                    if let Some(index) = item {
+                        array.push(index);
+                    }
+                }
+            }    
+        }
+        array
+    }
+
+    fn cross_neighbors(&self, pos: Vec3<T>) -> Vec<PointIndex> {
+        let mut neighbors = vec![ 
+            Vec3::new(pos.x + T::one(), pos.y, pos.z),
+            Vec3::new(pos.x, pos.y + T::one(), pos.z),
+            Vec3::new(pos.x, pos.y, pos.z + T::one()),
+        ];
+
+        if pos.x >= T::one() { neighbors.push(Vec3::new(pos.x - T::one(), pos.y, pos.z))};
+        if pos.y >= T::one() { neighbors.push(Vec3::new(pos.x, pos.y - T::one(), pos.z))};
+        if pos.z >= T::one() { neighbors.push(Vec3::new(pos.x, pos.y, pos.z - T::one()))};
+
+        let mut array = Vec::new();
+
+        for n in neighbors {
+            let item = self.index(n);
+            if let Some(index) = item {
+                array.push(index);
+            }
+        }
+        array
+    }
 }
 
 impl<I, T> Grid3D<I, T> for GridMap<I, T> where T: GridNum, I: PartialEq + Clone {
@@ -148,6 +198,14 @@ impl<I, T> Grid3D<I, T> for GridMap<I, T> where T: GridNum, I: PartialEq + Clone
             items.push(item);
         }
         items
+    }
+
+    fn neighbors(&self, pos: Vec3<T>, diagonal: bool) -> Vec<PointIndex> {
+        if diagonal {
+            return self.diag_neighbors(pos);
+        } else {
+            return self.cross_neighbors(pos);
+        }
     }
 }
 
