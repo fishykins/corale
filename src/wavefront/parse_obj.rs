@@ -15,8 +15,8 @@ pub fn parse<T, B>(input: B) -> Result<Mesh<T>, Error>
 
     for p in raw.positions {
         let x = T::from_f32(p.0).unwrap();
-        let y = T::from_f32(p.1).unwrap();
-        let z = T::from_f32(p.2).unwrap();
+        let y = T::from_f32(p.2).unwrap();
+        let z = T::from_f32(p.1).unwrap();
         mesh.add_vertex(Vertex::new(x, y, z));
     }
 

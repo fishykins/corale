@@ -10,11 +10,11 @@ pub use index_type::IndexType;
 
 use num::{Num, CheckedMul, FromPrimitive, ToPrimitive, Signed, Integer};
 use std::fmt::{Debug, Display};
-use std::ops::Mul;
+use std::ops::{SubAssign, AddAssign};
 
 pub type DefaultIx = usize;
-pub trait GridNum : Integer + Signed + Clone + Copy + CheckedMul + FromPrimitive + ToPrimitive + Display + Debug {}
-pub trait GeoNum : Num + Signed + Mul + Clone + Copy + FromPrimitive + ToPrimitive + PartialOrd + Display + Debug {}
+pub trait GridNum : Integer + Signed + AddAssign + SubAssign + Clone + Copy + CheckedMul + FromPrimitive + ToPrimitive + Display + Debug {}
+pub trait GeoNum : Num + Signed + Clone + Copy + FromPrimitive + ToPrimitive + PartialOrd + Display + Debug {}
 
 impl GridNum for i64 {}
 impl GridNum for i32 {}

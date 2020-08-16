@@ -1,6 +1,7 @@
 use vek::Vec3;
 use num::{Num, Signed};
 
+#[derive(Clone, Copy, Debug)]
 pub enum Direction {
     Up,
     Down,
@@ -57,6 +58,10 @@ impl Direction {
             Direction::Back => Vec3::new(T::zero(), T::zero(), - T::one()),
             _ => Vec3::new(T::zero(), T::zero(), T::zero()),
         }
+    }
+
+    pub fn is_none(&self) -> bool {
+        self.to_vec::<i32>() == Vec3::<i32>::zero()
     }
 }
 
