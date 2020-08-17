@@ -13,13 +13,24 @@ use std::fmt::{Debug, Display};
 use std::ops::{SubAssign, AddAssign};
 
 pub type DefaultIx = usize;
-pub trait GridNum : Integer + Signed + AddAssign + SubAssign + Clone + Copy + CheckedMul + FromPrimitive + ToPrimitive + Display + Debug {}
-pub trait GeoNum : Num + Signed + Clone + Copy + FromPrimitive + ToPrimitive + PartialOrd + Display + Debug {}
+pub trait OrdNum: Num + PartialOrd + Clone + Copy + Display + Debug + FromPrimitive + ToPrimitive {}
+pub trait GridNum : OrdNum + Integer + Signed + AddAssign + SubAssign + CheckedMul {}
+pub trait GeoNum : OrdNum + Signed {}
+
 
 impl GridNum for i64 {}
 impl GridNum for i32 {}
-impl GridNum for i16 {}
 impl GridNum for i8 {}
 
 impl GeoNum for f64 {}
 impl GeoNum for f32 {}
+
+impl OrdNum for i64 {}
+impl OrdNum for i32 {}
+impl OrdNum for i8 {}
+impl OrdNum for f64 {}
+impl OrdNum for f32 {}
+impl OrdNum for u64 {}
+impl OrdNum for u32 {}
+impl OrdNum for u8 {}
+impl OrdNum for usize {}

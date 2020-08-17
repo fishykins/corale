@@ -1,16 +1,16 @@
 
-use crate::core::GridNum;
+use crate::core::OrdNum;
 use crate::geom::Area;
 use super::{Cube, BoxCollider};
 use vek::Vec3;
 
 #[derive(Clone, Copy, Debug, PartialEq)]
-pub struct BoundingBox<T> where T: GridNum {
+pub struct BoundingBox<T> where T: OrdNum {
     min: Vec3<T>,
     max: Vec3<T>,
 }
 
-impl<T> BoundingBox<T> where T: GridNum {
+impl<T> BoundingBox<T> where T: OrdNum {
     pub fn new(min: Vec3<T>, max: Vec3<T>) -> Self {
         Self {
             min,
@@ -31,7 +31,7 @@ impl<T> BoundingBox<T> where T: GridNum {
     }
 }
 
-impl<T> Cube<T> for BoundingBox<T> where T: GridNum {
+impl<T> Cube<T> for BoundingBox<T> where T: OrdNum {
     fn min(&self) -> Vec3<T> {
         self.min
     }
@@ -40,7 +40,7 @@ impl<T> Cube<T> for BoundingBox<T> where T: GridNum {
     }
 }
 
-impl<T> BoxCollider<T> for BoundingBox<T> where T: GridNum {
+impl<T> BoxCollider<T> for BoundingBox<T> where T: OrdNum {
     fn contains(&self, other: &dyn Cube<T>) -> bool {
         let c1 = self.min().x <= other.min().x;
         let c2 = self.max().x >= other.max().x;
@@ -75,7 +75,7 @@ impl<T> BoxCollider<T> for BoundingBox<T> where T: GridNum {
     }
 }
 
-impl<T> Area<T> for BoundingBox<T> where T: GridNum {
+impl<T> Area<T> for BoundingBox<T> where T: OrdNum {
     fn area(&self) -> T {
         self.height() * self.width() * self.depth()
     }
