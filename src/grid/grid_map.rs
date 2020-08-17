@@ -9,9 +9,9 @@ pub struct GridMap<I, T> where T: GridNum, I: PartialEq + Clone {
     items: HashMap<PointIndex, GridObject<T, I>>,
     bounds: BoundingBox<T>,
     max_index: usize, 
-    width: usize,
-    depth: usize,
-    offset: Vec3<i64>,
+    dimesnsions: [T; 3],
+    hash_order: (usize, usize, usize),
+    offset: Vec3<T>,
 }
 
 impl<I, T> GridMap<I, T> where T: GridNum, I: PartialEq + Clone {
@@ -19,18 +19,22 @@ impl<I, T> GridMap<I, T> where T: GridNum, I: PartialEq + Clone {
         let width = (max.x - min.x).to_usize().unwrap();
         let depth = (max.z - min.z).to_usize().unwrap();
         let height = (max.y - min.y).to_usize().unwrap();
+        let dimesnsions = [T::from_usize(width).unwrap(), T::from_usize(height).unwrap(), T::from_usize(depth).unwrap()];
+        let hash_order = get_hash_order(width, height, depth);
 
         let max_index = height + (width * width) + (depth * width * depth);
         let mut offset = Vec3::zero();
         
+        //prevent negative indexing.
+        // !No longer nescisary due to the hashmap implimentation, but meh.
         if min.x < T::zero() {
-            offset.x = min.x.abs().to_i64().unwrap();
+            offset.x = min.x.abs();
         }
         if min.y < T::zero() {
-            offset.y = min.y.abs().to_i64().unwrap();
+            offset.y = min.y.abs();
         }
         if min.z < T::zero() {
-            offset.z = min.z.abs().to_i64().unwrap();
+            offset.z = min.z.abs();
         }
 
         Self {
@@ -38,8 +42,8 @@ impl<I, T> GridMap<I, T> where T: GridNum, I: PartialEq + Clone {
             items: HashMap::new(),
             max_index,
             offset,
-            width,
-            depth,
+            dimesnsions,
+            hash_order,
         }
     }
 
@@ -48,19 +52,21 @@ impl<I, T> GridMap<I, T> where T: GridNum, I: PartialEq + Clone {
         let width = bounds.width().to_usize().unwrap();
         let depth = bounds.depth().to_usize().unwrap();
         let height = bounds.height().to_usize().unwrap();
+        let dimesnsions = [T::from_usize(width).unwrap(), T::from_usize(height).unwrap(), T::from_usize(depth).unwrap()];
+        let hash_order = get_hash_order(width, height, depth);
 
         let max_index = height + (width * width) + (depth * width * depth);
 
         let mut offset = Vec3::zero();
         
         if bounds.min().x < T::zero() {
-            offset.x = bounds.min().x.abs().to_i64().unwrap();
+            offset.x = bounds.min().x.abs();
         }
         if bounds.min().y < T::zero() {
-            offset.y = bounds.min().y.abs().to_i64().unwrap();
+            offset.y = bounds.min().y.abs();
         }
         if bounds.min().z < T::zero() {
-            offset.z = bounds.min().z.abs().to_i64().unwrap();
+            offset.z = bounds.min().z.abs();
         }
 
         Self {
@@ -68,17 +74,25 @@ impl<I, T> GridMap<I, T> where T: GridNum, I: PartialEq + Clone {
             items: HashMap::new(),
             max_index,
             offset,
-            width,
-            depth,
+            dimesnsions,
+            hash_order,
         }
     }
 
+    /// the hashing algorithm used:
+    /// largest axis position value * largest axis width * second largest axis size +
+    /// second largest axis position value * second largest axis size +
+    /// smallest axis position value
     fn hash(&self, pos: Vec3<T>) -> PointIndex {
-        let x = self.offset.x + pos.x.to_i64().unwrap();
-        let y = self.offset.y + pos.y.to_i64().unwrap();
-        let z = self.offset.z + pos.z.to_i64().unwrap();
+        let point = [self.offset.x + pos.x, self.offset.y + pos.y, self.offset.z + pos.z];
+        let dim = &self.dimesnsions;
+
         PointIndex::new(
-            (y + (x * self.width as i64) + (z * self.width as i64 * self.depth as i64)) as usize
+            (
+                (point[self.hash_order.0] * dim[self.hash_order.0] * dim[self.hash_order.1]) + 
+                (point[self.hash_order.1] * dim[self.hash_order.1]) + 
+                point[self.hash_order.2]
+            ).to_usize().unwrap()
         ) 
     }
 
@@ -230,6 +244,42 @@ impl<I, T> BoxCollider<T> for GridMap<I, T> where T: GridNum, I: PartialEq + Clo
 
     fn contains_point(&self, point: Vec3<T>) -> bool {
         self.bounds.contains_point(point)
+    }
+}
+
+fn get_hash_order(width: usize, height: usize, depth: usize) -> (usize, usize, usize) {
+    if width >= depth && width >= height {
+        //case 1: width is the biggest
+        if height > depth {
+            //(width, height, depth)
+            (0, 1, 2)
+        }
+        else {
+            //(width, depth, height)
+            (0, 2, 1)
+        }
+    }
+    else if depth >= width && depth >= height {
+        //case 2: depth is the biggest
+        if height > width {
+            //(depth, height, width)
+            (2, 1, 0)
+        }
+        else {
+            //(depth, width, height)
+            (2, 0, 1)
+        }
+    }
+    else {
+        //case 3: height is the biggest
+        if width > depth {
+            //(height, width, depth)
+            (1, 0, 2)
+        }
+        else {
+            //(height, depth, width)
+            (1, 2, 0)
+        }
     }
 }
 
