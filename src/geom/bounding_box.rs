@@ -1,5 +1,6 @@
 
 use crate::core::GridNum;
+use crate::geom::Area;
 use super::{Cube, BoxCollider};
 use vek::Vec3;
 
@@ -71,5 +72,11 @@ impl<T> BoxCollider<T> for BoundingBox<T> where T: GridNum {
         let c6 = self.max().z >= point.z;
 
         c1 && c2 && c3 && c4 && c5 && c6
+    }
+}
+
+impl<T> Area<T> for BoundingBox<T> where T: GridNum {
+    fn area(&self) -> T {
+        self.height() * self.width() * self.depth()
     }
 }

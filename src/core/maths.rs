@@ -32,7 +32,6 @@ pub fn lerp_int<T>(a: T, b: T, percent: T) -> T
     }
 }
 
-
 #[test]
 fn lerp_test() {
     assert_eq!(5., lerp(0., 10., 0.5));
