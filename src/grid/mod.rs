@@ -1,5 +1,6 @@
 mod grid_map;
 mod grid_object;
+mod error;
 
 use crate::geom::Cube;
 use crate::core::{GridNum, PointIndex};
@@ -7,12 +8,7 @@ use vek::Vec3;
 
 pub use grid_map::GridMap;
 pub use grid_object::GridObject;
-
-#[derive(Debug, Clone, Copy, Eq, PartialEq)]
-pub enum GridError {
-    SpaceOccupied,
-    OutOfBounds,
-}
+pub use error::GridError;
 
 pub trait Grid3D<I, T>: Cube<T>
     where 
@@ -20,7 +16,7 @@ pub trait Grid3D<I, T>: Cube<T>
         T: GridNum
         
 {
-    fn add(&mut self, item: I, pos: Vec3<T>) -> Result<PointIndex, GridError>;
+    fn add(&mut self, item: I, pos: Vec3<T>) -> Result<PointIndex, GridError<T>>;
     fn remove(&mut self, index: PointIndex) -> bool;
 
     fn index(&self, pos: Vec3<T>) -> Option<PointIndex>;

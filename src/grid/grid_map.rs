@@ -146,7 +146,7 @@ impl<I, T> GridMap<I, T> where T: GridNum, I: PartialEq + Clone {
 
 impl<I, T> Grid3D<I, T> for GridMap<I, T> where T: GridNum, I: PartialEq + Clone {
 
-    fn add(&mut self, item: I, pos: Vec3<T>) -> Result<PointIndex, GridError> {
+    fn add(&mut self, item: I, pos: Vec3<T>) -> Result<PointIndex, GridError<T>> {
         if !self.contains_point(pos) {
             return Err(GridError::OutOfBounds);
         }
@@ -155,7 +155,7 @@ impl<I, T> Grid3D<I, T> for GridMap<I, T> where T: GridNum, I: PartialEq + Clone
             self.items.insert(i, GridObject::new(pos, item));
             return Ok(i);
         }
-        Err(GridError::SpaceOccupied)
+        Err(GridError::SpaceOccupied(pos))
     }
 
     fn remove(&mut self, index: PointIndex) -> bool {
