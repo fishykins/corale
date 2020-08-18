@@ -1,9 +1,8 @@
-use num::{Float, Integer, FromPrimitive};
-
+use crate::core::*;
 pub use num::clamp;
 
 /// Lerp between a and b by amount (0 - 1)
-pub fn lerp<T: Float>(a: T, b: T, amount: T) -> T {
+pub fn lerp<T>(a: T, b: T, amount: T) -> T where T: OrdNum {
     if a == b {
         return a;
     }
@@ -16,20 +15,9 @@ pub fn lerp<T: Float>(a: T, b: T, amount: T) -> T {
     }
 }
 
-/// Lerp between a and b by amount (0 - 1)
-pub fn lerp_int<T>(a: T, b: T, percent: T) -> T
-    where T: Integer + FromPrimitive + Copy
-{
-    if a == b {
-        return a;
-    }
-    if a > b {
-        let range: T = a - b;
-        return b + ( range * range / T::from_usize(100).unwrap() * percent);
-    } else {
-        let range = b - a;
-        return a + ( range * range / T::from_usize(100).unwrap() * percent);
-    }
+/// Lerp between a and b by amount (0 - 1) which is clamped
+pub fn lerpc<T>(a: T, b: T, amount: T) -> T where T: OrdNum {
+    lerp(a, b, clamp(amount, T::zero(), T::one()))
 }
 
 #[test]

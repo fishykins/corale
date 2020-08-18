@@ -1,6 +1,7 @@
 
 use crate::core::OrdNum;
 use crate::geom::Area;
+use crate::core::maths;
 use super::{Cube, BoxCollider};
 use vek::Vec3;
 
@@ -28,6 +29,18 @@ impl<T> BoundingBox<T> where T: OrdNum {
 
     pub fn depth(&self) -> T {
         self.max.z - self.min.z
+    }
+
+    pub fn lerp_x(&self, amount: T) -> T {
+        maths::lerpc(self.min.x, self.max.x, amount)
+    }
+
+    pub fn lerp_y(&self, amount: T) -> T {
+        maths::lerpc(self.min.y, self.max.y, amount)
+    }
+
+    pub fn lerp_z(&self, amount: T) -> T {
+        maths::lerpc(self.min.z, self.max.z, amount)
     }
 }
 
