@@ -42,6 +42,14 @@ impl<T> BoundingBox<T> where T: OrdNum {
     pub fn lerp_z(&self, amount: T) -> T {
         maths::lerpc(self.min.z, self.max.z, amount)
     }
+
+    pub fn inverse_lerp(&self, pos: Vec3<T>) -> Vec3<T> {
+        Vec3::new(
+            maths::inverse_lerp(self.min().x, self.max().x, pos.x),
+            maths::inverse_lerp(self.min().y, self.max().y, pos.y),
+            maths::inverse_lerp(self.min().z, self.max().z, pos.z)
+        )
+    }
 }
 
 impl<T> Cube<T> for BoundingBox<T> where T: OrdNum {
