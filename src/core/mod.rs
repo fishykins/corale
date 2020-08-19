@@ -8,14 +8,14 @@ pub use point::{Point, PointIndex};
 pub use direction::Direction;
 pub use index_type::IndexType;
 
-use num::{Num, CheckedMul, FromPrimitive, ToPrimitive, Signed, Integer};
+use num::{Num, CheckedMul, FromPrimitive, ToPrimitive, Signed, Integer, Float};
 use std::fmt::{Debug, Display};
 use std::ops::{SubAssign, AddAssign};
 
 pub type DefaultIx = usize;
 pub trait OrdNum: Num + PartialOrd + Clone + Copy + Display + Debug + FromPrimitive + ToPrimitive {}
 pub trait GridNum : OrdNum + Integer + Signed + AddAssign + SubAssign + CheckedMul {}
-pub trait GeoNum : OrdNum + Signed {}
+pub trait GeoNum : OrdNum + Float + Signed {}
 
 
 impl GridNum for i64 {}
