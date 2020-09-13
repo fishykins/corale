@@ -1,6 +1,6 @@
 use vek::Vec3;
 use crate::core::{Point, GeoNum};
-use std::ops::Mul;
+use std::ops::{Mul, Div};
 
 #[derive(Clone, Copy, Debug, Default, PartialEq, PartialOrd, Eq, Ord)]
 pub struct Vertex<T> where T: GeoNum {
@@ -15,6 +15,14 @@ impl<T> Vertex<T> where T: GeoNum {
             x,
             y,
             z
+        }
+    }
+
+    pub fn zero() -> Self {
+        Self {
+            x: T::zero(),
+            y: T::zero(),
+            z: T::zero(),
         }
     }
 
@@ -67,6 +75,17 @@ impl<T> Mul<T> for Vertex<T> where T: GeoNum {
         let x = self.x * rhs;
         let y = self.y * rhs;
         let z = self.z * rhs;
+        Self::new(x, y, z)
+    }
+}
+
+impl<T> Div<T> for Vertex<T> where T: GeoNum {
+    type Output = Vertex<T>;
+
+    fn div(self, rhs: T) -> Self {
+        let x = self.x / rhs;
+        let y = self.y / rhs;
+        let z = self.z / rhs;
         Self::new(x, y, z)
     }
 }

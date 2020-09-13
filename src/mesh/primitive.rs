@@ -1,5 +1,5 @@
-use crate::core::{GeoNum, PointIndex};
-use crate::mesh::{Vertex, Face};
+use crate::core::{GeoNum, PointIndex, Vertex};
+use crate::mesh::{Face};
 
 pub trait Primitive<T> where T: GeoNum {
     /// Getter for verts

@@ -1,12 +1,16 @@
 mod direction;
 mod index_type;
 mod point;
+mod vertex;
+mod line;
 
 pub mod maths;
 
 pub use point::{Point, PointIndex};
 pub use direction::Direction;
 pub use index_type::IndexType;
+pub use vertex::Vertex;
+pub use line::Line;
 
 use num::{Num, CheckedMul, FromPrimitive, ToPrimitive, Signed, Integer, Float};
 use std::fmt::{Debug, Display};

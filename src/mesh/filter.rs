@@ -1,5 +1,5 @@
-use super::{Mesh, Vertex};
-use crate::core::{GeoNum};
+use super::{Mesh};
+use crate::core::{GeoNum, Vertex};
 use std::fmt::{Debug};
 
 pub trait Filter<T>: Debug where T: GeoNum {

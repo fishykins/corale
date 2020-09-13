@@ -1,5 +1,5 @@
 use crate::mesh::*;
-use crate::core::{GeoNum, PointIndex};
+use crate::core::{GeoNum, PointIndex, Vertex};
 
 use std::io::{Error, BufRead};
 use obj::{raw::{parse_obj as parse_external, object::Polygon}};

@@ -1,6 +1,6 @@
 use vek::Vec3;
-use super::{Face, Vertex, FaceIndex, Primitive, Filter};
-use crate::core::{PointIndex, GeoNum};
+use super::{Face, FaceIndex, Primitive, Filter};
+use crate::core::{PointIndex, GeoNum, Vertex};
 use std::fmt::{Error, Debug};
 
 pub trait Draw {
